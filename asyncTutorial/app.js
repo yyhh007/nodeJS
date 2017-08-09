@@ -63,10 +63,29 @@ var writable = fs.createWriteStream(__dirname+'/greetLongCopy.txt')
 
 //stream uses event emitter, thus we an use the on function to move greetLong content to greetLongCopy
 //since data is being streamed in chunks, it will ensure multiple user less waiting around and faster web resond time
-readable.on('data', function(chunk){
-    console.log(chunk)
-    writable.write(chunk)
-})
+/*readable.on('data', function(chunk){
+    //console.log(chunk)
+    //writable.write(chunk)
+})*/
+
+//tutorial 52 pipe
+//library method for chunk streaming and moving from reading to writing
+
+//this line replaces the above code as a pipe native function
+//returns destination location
+
+//algoritm for compressing files
+var zlib = require('zlib')
+
+//create a compressed streamed file awesome
+var gzip = zlib.createGzip()
+
+var compressed =  fs.createWriteStream(__dirname+'/greetZiped.txt.gz')
+
+readable.pipe(writable)
+
+//method chaining, returns objects that can be chained together to call more functions 
+readable.pipe(gzip).pipe(compressed)
 
 
 
